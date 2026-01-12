@@ -1,0 +1,86 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont;
+}
+
+/* DESKTOP */
+.desktop {
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(135deg, #8fd3f4, #84fab0);
+  position: relative;
+  padding: 24px;
+}
+
+/* ICONS */
+.desktop-icons {
+  display: flex;
+  gap: 24px;
+}
+
+.desktop-icon {
+  width: 80px;
+  text-align: center;
+  cursor: pointer;
+  color: white;
+  user-select: none;
+}
+
+.desktop-icon .icon {
+  font-size: 36px;
+}
+
+/* WINDOW */
+.window {
+  position: absolute;
+  width: 380px;
+  background: #1f2937;
+  color: white;
+  border-radius: 10px;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.35);
+}
+
+/* WINDOW HEADER */
+.window-header {
+  height: 36px;
+  background: #111827;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+  cursor: grab;
+  border-radius: 10px 10px 0 0;
+}
+
+.window-close {
+  cursor: pointer;
+}
+
+/* WINDOW CONTENT */
+.window-content {
+  padding: 16px;
+  font-size: 14px;
+}
+
+/* FORM */
+input, textarea {
+  width: 100%;
+  margin-top: 6px;
+  margin-bottom: 12px;
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+}
+
+button {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}

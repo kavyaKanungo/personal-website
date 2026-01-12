@@ -1,0 +1,14 @@
+/* app/styles.css */
+@reference "./globals.css";
+
+@layer base {
+  body {
+    @apply bg-sky-200;
+  }
+}
+
+@layer components {
+  .my-custom-button {
+    @apply rounded-lg px-4 py-2;
+  }
+}
