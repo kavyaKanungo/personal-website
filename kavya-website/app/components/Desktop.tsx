@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
 import Window from './Window';
 import Icon from './Icon';
+import { useEffect, useState } from 'react';
+
 
 type AppWindow = {
   id: string;
@@ -10,6 +11,9 @@ type AppWindow = {
   content: React.ReactNode;
   z: number;
 };
+
+
+
 
 export default function Desktop() {
   const [windows, setWindows] = useState<AppWindow[]>([]);
@@ -24,6 +28,15 @@ export default function Desktop() {
     setWindows(w => w.filter(win => win.id !== id));
   }
 
+  useEffect(() => {
+  openWindow(
+    'home',
+    'home',
+    <HomeContent openWindow={openWindow} />
+  );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, []);
+
   function focusWindow(id: string) {
     setZCounter(z => z + 1);
     setWindows(w =>
@@ -35,58 +48,6 @@ export default function Desktop() {
 
   return (
     <div className="desktop">
-      <div className="desktop-icons">
-        <Icon
-          label="About"
-          icon="👩‍💻"
-          onClick={() =>
-            openWindow(
-              'about',
-              'About Me',
-              <>Hi! I’m Kavya, a CS student passionate about building things.</>
-            )
-          }
-        />
-
-        <Icon
-          label="GitHub"
-          icon="🐙"
-          onClick={() => window.open('https://github.com/YOUR_USERNAME')}
-        />
-
-        <Icon
-          label="LinkedIn"
-          icon="💼"
-          onClick={() => window.open('https://linkedin.com/in/YOUR_USERNAME')}
-        />
-
-        <Icon
-          label="Projects"
-          icon="📂"
-          onClick={() =>
-            openWindow(
-              'projects',
-              'Projects',
-              <ul>
-                <li>Retro Desktop Portfolio</li>
-                <li>Next.js Apps</li>
-              </ul>
-            )
-          }
-        />
-
-        <Icon
-          label="Contact"
-          icon="✉️"
-          onClick={() =>
-            openWindow(
-              'contact',
-              'Contact Me',
-              <ContactForm />
-            )
-          }
-        />
-      </div>
 
       {windows.map(win => (
         <Window
@@ -102,6 +63,133 @@ export default function Desktop() {
     </div>
   );
 }
+
+
+
+
+function HomeContent({
+
+  openWindow,
+}: {
+  openWindow: (id: string, title: string, content: React.ReactNode) => void;
+}) {
+  return (
+    <div style={{ textAlign: 'center' }}>
+      <h1 style={{ fontSize: 28, marginBottom: 8 }}>hi! i’m kavya</h1>
+
+      <p style={{ opacity: 0.8, marginBottom: 24 }}>
+        As a computer science student fully committed to life-long learning,
+        I’m a creative with a passion for software development.
+      </p>
+
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          gap: 12,
+        }}
+      >
+        <HomeButton
+          label="about"
+          icon="👩‍💻"
+          onClick={() =>
+            openWindow(
+              'about',
+              'about',
+              <>I’m a CS student interested in product + engineering.</>
+            )
+          }
+        />
+
+        <HomeButton
+          label="links"
+          icon="🔗"
+          onClick={() =>
+            openWindow(
+              'links',
+              'links',
+              <>
+                <p>GitHub / LinkedIn / Twitter</p>
+              </>
+            )
+          }
+        />
+
+        <HomeButton
+          label="work"
+          icon="💼"
+          onClick={() =>
+            openWindow(
+              'work',
+              'work',
+              <ul>
+                <li>Retro Desktop Portfolio</li>
+                <li>Next.js Projects</li>
+              </ul>
+            )
+          }
+        />
+
+        <HomeButton
+          label="faq"
+          icon="❓"
+          onClick={() =>
+            openWindow(
+              'faq',
+              'faq',
+              <>Coming soon.</>
+            )
+          }
+        />
+
+        <HomeButton
+          label="contact"
+          icon="✉️"
+          onClick={() =>
+            openWindow(
+              'contact',
+              'contact',
+              <ContactForm />
+            )
+          }
+        />
+      </div>
+    </div>
+  );
+}
+
+
+
+
+function HomeButton({
+  label,
+  icon,
+  onClick,
+}: {
+  label: string;
+  icon: string;
+  onClick: () => void;
+}) {
+  return (
+    <div
+      onClick={onClick}
+      style={{
+        background: '#374151',
+        borderRadius: 10,
+        padding: 12,
+        width: 64,
+        cursor: 'pointer',
+        textAlign: 'center',
+      }}
+    >
+      <div style={{ fontSize: 20 }}>{icon}</div>
+      <div style={{ fontSize: 12, marginTop: 6 }}>{label}</div>
+    </div>
+  );
+}
+
+
+
 
 /* CONTACT FORM COMPONENT */
 function ContactForm() {

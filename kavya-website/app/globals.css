@@ -39,7 +39,7 @@ html, body {
 /* WINDOW */
 .window {
   position: absolute;
-  width: 380px;
+  width: 420px;
   background: #1f2937;
   color: white;
   border-radius: 10px;
@@ -66,6 +66,9 @@ html, body {
 .window-content {
   padding: 16px;
   font-size: 14px;
+  h1 {
+  font-weight: 600;
+}
 }
 
 /* FORM */
