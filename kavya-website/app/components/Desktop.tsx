@@ -3,6 +3,7 @@
 import Window from './Window';
 import Icon from './Icon';
 import { useEffect, useState } from 'react';
+import Wavify from 'react-wavify';
 
 
 type AppWindow = {
@@ -10,18 +11,16 @@ type AppWindow = {
   title: string;
   content: React.ReactNode;
   z: number;
+  draggable?: boolean;
 };
-
-
-
 
 export default function Desktop() {
   const [windows, setWindows] = useState<AppWindow[]>([]);
-  const [zCounter, setZCounter] = useState(1);
+  const [zCounter, setZCounter] = useState(10);
 
-  function openWindow(id: string, title: string, content: React.ReactNode) {
+  function openWindow(id: string, title: string, content: React.ReactNode, draggable: boolean = true) {
     setZCounter(z => z + 1);
-    setWindows(w => [...w, { id, title, content, z: zCounter + 1 }]);
+    setWindows(w => [...w, { id, title, content, z: zCounter + 1, draggable }]);
   }
 
   function closeWindow(id: string) {
@@ -32,7 +31,8 @@ export default function Desktop() {
   openWindow(
     'home',
     'home',
-    <HomeContent openWindow={openWindow} />
+    <HomeContent openWindow={openWindow} />,
+    false
   );
   // eslint-disable-next-line react-hooks/exhaustive-deps
 }, []);
@@ -47,8 +47,41 @@ export default function Desktop() {
   }
 
   return (
-    <div className="desktop">
-
+    <div className="desktop" style={{ backgroundColor: '#000000', position: 'relative', overflow: 'hidden', height: '100vh' }}>
+      <Wavify
+        fill='#0ea5e9'
+        paused={false}
+        options={{
+          height: 50,
+          amplitude: 10,
+          speed: 0.15,
+          points: 3,
+        }}
+        style={{
+          position: 'absolute',
+          top: '55%',
+          left: 0,
+          width: '100%',
+          zIndex: 1,
+        }}
+      />
+      <Wavify
+        fill='#1e5a7a'
+        paused={false}
+        options={{
+          height: 120,
+          amplitude: 5,
+          speed: 0.15,
+          points: 1,
+        }}
+        style={{
+          position: 'absolute',
+          top: '55%',
+          left: 0,
+          width: '100%',
+          zIndex: 2,
+        }}
+      />
       {windows.map(win => (
         <Window
           key={win.id}
@@ -56,6 +89,8 @@ export default function Desktop() {
           zIndex={win.z}
           onClose={() => closeWindow(win.id)}
           onFocus={() => focusWindow(win.id)}
+          draggable={win.draggable !== false}
+          isHomeWindow={win.id === 'home'}
         >
           {win.content}
         </Window>
@@ -64,29 +99,25 @@ export default function Desktop() {
   );
 }
 
-
-
-
 function HomeContent({
-
   openWindow,
 }: {
-  openWindow: (id: string, title: string, content: React.ReactNode) => void;
+  openWindow: (id: string, title: string, content: React.ReactNode, draggable?: boolean) => void;
 }) {
   return (
-    <div style={{ textAlign: 'center' }}>
-      <h1 style={{ fontSize: 28, marginBottom: 8 }}>hi! i’m kavya</h1>
+    <div style={{ textAlign: 'center', padding: '60px 40px' }}>
+      <h1 style={{ fontSize: 48, marginBottom: 16, color: '#e0e7ff', fontWeight: 600 }}>hi! i'm kavya</h1>
 
-      <p style={{ opacity: 0.8, marginBottom: 24 }}>
+      <p style={{ opacity: 0.7, marginBottom: 60, color: '#c7d2fe', fontSize: 16 }}>
         As a computer science student fully committed to life-long learning,
-        I’m a creative with a passion for software development.
+        I'm a creative with a passion for software development.
       </p>
 
       <div
         style={{
           display: 'flex',
-          justifyContent: 'space-between',
-          gap: 12,
+          justifyContent: 'center',
+          gap: 24,
         }}
       >
         <HomeButton
@@ -96,7 +127,8 @@ function HomeContent({
             openWindow(
               'about',
               'about',
-              <>I’m a CS student interested in product + engineering.</>
+              <>I'm a CS student interested in product + engineering.</>,
+              true
             )
           }
         />
@@ -110,7 +142,8 @@ function HomeContent({
               'links',
               <>
                 <p>GitHub / LinkedIn / Twitter</p>
-              </>
+              </>,
+              true
             )
           }
         />
@@ -125,7 +158,8 @@ function HomeContent({
               <ul>
                 <li>Retro Desktop Portfolio</li>
                 <li>Next.js Projects</li>
-              </ul>
+              </ul>,
+              true
             )
           }
         />
@@ -137,7 +171,8 @@ function HomeContent({
             openWindow(
               'faq',
               'faq',
-              <>Coming soon.</>
+              <>Coming soon.</>,
+              true
             )
           }
         />
@@ -149,7 +184,8 @@ function HomeContent({
             openWindow(
               'contact',
               'contact',
-              <ContactForm />
+              <ContactForm />,
+              true
             )
           }
         />
@@ -157,9 +193,6 @@ function HomeContent({
     </div>
   );
 }
-
-
-
 
 function HomeButton({
   label,
@@ -174,16 +207,26 @@ function HomeButton({
     <div
       onClick={onClick}
       style={{
-        background: '#374151',
-        borderRadius: 10,
-        padding: 12,
-        width: 64,
+        background: 'transparent',
+        border: '2px solid #60a5fa',
+        borderRadius: 12,
+        padding: 16,
+        width: 80,
         cursor: 'pointer',
         textAlign: 'center',
+        transition: 'all 0.2s',
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.borderColor = '#93c5fd';
+        e.currentTarget.style.backgroundColor = 'rgba(4, 35, 72, 0.1)';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = '#60a5fa';
+        e.currentTarget.style.backgroundColor = 'transparent';
       }}
     >
-      <div style={{ fontSize: 20 }}>{icon}</div>
-      <div style={{ fontSize: 12, marginTop: 6 }}>{label}</div>
+      <div style={{ fontSize: 24 }}>{icon}</div>
+      <div style={{ fontSize: 13, marginTop: 8, color: '#e0e7ff', fontWeight: 500 }}>{label}</div>
     </div>
   );
 }

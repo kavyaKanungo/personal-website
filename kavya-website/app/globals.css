@@ -9,11 +9,12 @@ html, body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont;
 }
 
+
 /* DESKTOP */
 .desktop {
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(135deg, #8fd3f4, #84fab0);
+  background: #0b5583;
   position: relative;
   padding: 24px;
 }
@@ -36,26 +37,28 @@ html, body {
   font-size: 36px;
 }
 
-/* WINDOW */
+/* WINDOW WHEN WE OPEN*/
 .window {
   position: absolute;
   width: 420px;
-  background: #1f2937;
+  background: #132137;
   color: white;
   border-radius: 10px;
-  box-shadow: 0 25px 50px rgba(0,0,0,0.35);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.35);
+  border: 2px solid #ffffff;
 }
 
-/* WINDOW HEADER */
+/* WINDOW HEADER / HOME BAR */
 .window-header {
   height: 36px;
-  background: #111827;
+  background: #000000;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 10px;
   cursor: grab;
   border-radius: 10px 10px 0 0;
+  border-bottom: 2px solid #ffffff;
 }
 
 .window-close {
@@ -66,9 +69,10 @@ html, body {
 .window-content {
   padding: 16px;
   font-size: 14px;
-  h1 {
-  font-weight: 600;
 }
+
+.window-content h1 {
+  font-weight: 600;
 }
 
 /* FORM */
