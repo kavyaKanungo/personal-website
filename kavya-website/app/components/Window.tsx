@@ -2,6 +2,12 @@
 
 import { useState, useEffect } from 'react';
 
+type ThemeData = {
+  windowBackground: string;
+  windowText: string;
+  windowHeader: string;
+};
+
 type Props = {
   title: string;
   zIndex: number;
@@ -10,6 +16,8 @@ type Props = {
   children: React.ReactNode;
   draggable: boolean;
   isHomeWindow: boolean;
+  theme?: ThemeData;
+  isDark?: boolean;
 };
 
 export default function Window({
@@ -20,6 +28,8 @@ export default function Window({
   children,
   draggable,
   isHomeWindow,
+  theme,
+  isDark,
 }: Props) {
   const [pos, setPos] = useState({ x: 120, y: 120 });
   const [dragging, setDragging] = useState(false);
@@ -27,10 +37,17 @@ export default function Window({
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // Position windows offset from the home window (slightly bottom and right)
     if (isHomeWindow) {
       setPos({
         x: window.innerWidth / 2 - 375,
-        y: 150,
+        y: window.innerHeight / 2 - 250,
+      });
+    } else {
+      // Offset new windows to bottom-right of home window by 40px
+      setPos({
+        x: window.innerWidth / 2 - 375 + 40,
+        y: window.innerHeight / 2 - 250 + 40,
       });
     }
     setMounted(true);
@@ -60,6 +77,10 @@ export default function Window({
 
   if (!mounted) return null;
 
+  const baseBg = theme?.windowBackground ?? (isDark ? '#132136' : '#ffffff');
+  const baseText = theme?.windowText ?? (isDark ? '#ffffff' : '#0f172a');
+  const headerBg = theme?.windowHeader ?? (isDark ? '#000000' : '#e2e8f0');
+
   return (
     <div
       className="window"
@@ -69,7 +90,8 @@ export default function Window({
         zIndex,
         width: isHomeWindow ? 750 : undefined,
         height: isHomeWindow ? 500 : undefined,
-        backgroundColor: isHomeWindow ? '#132136' : undefined,
+        backgroundColor: baseBg,
+        color: baseText,
         border: isHomeWindow ? '2px solid #ffffff' : undefined,
       }}
       onMouseMove={onDrag}
@@ -77,7 +99,7 @@ export default function Window({
       onMouseLeave={stopDrag}
       onMouseDown={onFocus}
     >
-      <div className="window-header" onMouseDown={startDrag} style={{ cursor: draggable ? 'grab' : 'default', borderBottom: isHomeWindow ? '2px solid #ffffff' : undefined }}>
+      <div className="window-header" onMouseDown={startDrag} style={{ cursor: draggable ? 'grab' : 'default', borderBottom: isHomeWindow ? '2px solid #ffffff' : undefined, backgroundColor: headerBg }}>
         <span>{title}</span>
         <span className="window-close" onClick={onClose}>✕</span>
       </div>
